@@ -15,7 +15,9 @@ const create = router.post('/', (req, res, next) => {
     res.status(201).send();
 });
 
-
+const read = router.read('/', (req, res) => {
+    res.status(200).send();
+});
 
 app.use('/', route);
 app.use('/produtos', create);
