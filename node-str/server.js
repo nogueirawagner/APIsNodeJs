@@ -21,4 +21,4 @@ const route = router.get('/', (req, res, next) =>
 app.use('/', route);
 
 server.listen(port);
-console.log('Deu certo');
+console.log('Deu certo ' + port);
