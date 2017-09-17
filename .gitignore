@@ -1,4 +1,5 @@
 /node-str/node_modules
 .suo
 .vs
-slnx.sqlite
+./.vs/slnx.sqlite
+./.vs
