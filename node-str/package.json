@@ -7,11 +7,14 @@
     "start": "node ./bin/server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Wagner Nogueira",
   "license": "ISC",
   "dependencies": {
     "debug": "^3.0.1",
     "express": "^4.15.4",
     "http": "0.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
   }
 }
