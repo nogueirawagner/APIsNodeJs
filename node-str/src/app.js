@@ -10,6 +10,14 @@ const route = router.get('/', (req, res, next) => {
         versao: "0.0.1"
     });
 });
+
+const create = router.post('/', (req, res, next) => {
+    res.status(201).send();
+});
+
+
+
 app.use('/', route);
+app.use('/produtos', create);
 
 module.exports = app;

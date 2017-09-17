@@ -12,7 +12,7 @@ const server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-console.log('Rodando na porta ' + port);
+console.log('API Rodando na porta ' + port);
 
 // Normalizar porta
 function normalizePort(valor) {
@@ -42,7 +42,7 @@ function onError(error) {
             process.exit(1);
             break;
         case 'EADDRINUSE':
-            console.error(bind + ' está em uso');
+            console.error(bind + ' esta em uso');
             process.exit(1);
         default:
             throw error;
