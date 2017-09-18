@@ -11,7 +11,8 @@
     "body-parser": "^1.18.1",
     "debug": "^3.0.1",
     "express": "^4.15.4",
-    "http": "0.0.0"
+    "http": "0.0.0",
+    "mongoose": "^4.11.11"
   },
   "devDependencies": {
     "grunt": "^1.0.1"
