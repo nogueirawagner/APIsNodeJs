@@ -11,19 +11,19 @@ const schema = new Schema({
     },
     codigo: {
         type: String,
-        required: true,
+        required: [true, 'O codigo é obrigatorio'],
         trim: true,
         index: true,
         unique: true
     },
     descricao: {
         type: String,
-        required: true,
+        required: [true, 'A descrição é obrigatório'],
         trim: true
     },
     preco: {
         type: Number,
-        required: true
+        required: [true, 'Preco é obrigatório'],
     },
     ativo: {
         type: Boolean,
@@ -32,10 +32,8 @@ const schema = new Schema({
     },
     marca: [{
         type: String,
-        required: true
+        required: [true, 'A marca é obrigatório']
     }]
-
-
 });
 
 module.exports = mongoose.model('Produto', schema);

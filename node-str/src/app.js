@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const app = express();
 const router = express.Router();
 
+const Produto = require('./models/produto');
 
 //Conecta ao banco
 mongoose.connect('mongodb://sa:sa@ds044989.mlab.com:44989/apisnode');
