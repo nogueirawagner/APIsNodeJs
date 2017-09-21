@@ -87,12 +87,24 @@ exports.alterarProduto = (req, res) => {
 			res.status(400)
 				.send(
 				{
-					message: 'Falha ao atualizar produto',
+					message: 'Falha ao atualizar produto com sucesso',
 					data: e
 				});
 		});
 };
 
-exports.delete = (req, res) => {
-	res.status(200).send(req.body);
+exports.deletarProduto = (req, res) => {
+	Produto
+	.findOneAndRemove(req.body.id)
+	.then(x => {
+		res.status(200).send({ message: 'Produto removido com sucesso!' });
+	})
+	.catch(e => {
+		res.status(400)
+			.send(
+			{
+				message: 'Falha ao remover o produto',
+				data: e
+			});
+	});
 };
