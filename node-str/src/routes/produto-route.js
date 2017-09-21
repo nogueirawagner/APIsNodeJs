@@ -9,7 +9,7 @@ router.get('/:codigo', controller.listarProdCodigo);
 router.get('/admin/:id', controller.listarPorID);
 router.get('/marca/:marca', controller.listarPorMarca);
 router.post('/', controller.post);
-router.put('/:id', controller.put);
+router.put('/:id', controller.alterarProduto);
 router.delete('/', controller.delete);
 
 module.exports = router;	
