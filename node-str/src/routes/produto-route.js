@@ -8,8 +8,8 @@ router.get('/', controller.listarProdutos);
 router.get('/:codigo', controller.listarProdCodigo);
 router.get('/admin/:id', controller.listarPorID);
 router.get('/marca/:marca', controller.listarPorMarca);
-router.post('/', controller.post);
+router.post('/', controller.salvar);
 router.put('/:id', controller.alterarProduto);
 router.delete('/', controller.deletarProduto);
 
-module.exports = router;	
+module.exports = router;

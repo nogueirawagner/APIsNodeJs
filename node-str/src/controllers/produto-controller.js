@@ -2,16 +2,12 @@
 
 const mongoose = require('mongoose');
 const produto = mongoose.model('Produto')
+const produto_repo = require('../repositories/produto-repositorio');
 const validator = require('../validators/fluent-validator');
 
-
 exports.listarPorMarca = (req, res) => {
-	produto.find(
-		{
-			marca: req.params.marca,
-			ativo: true
-		},
-		'codigo titulo preco marca')
+	produto_repo
+		.listarPorMarca(req.params.marca)
 		.then(data => {
 			res.status(200).send(data);
 		}).catch(e => {
@@ -20,7 +16,8 @@ exports.listarPorMarca = (req, res) => {
 }
 
 exports.listarPorID = (req, res) => {
-	produto.findById(req.params.id)
+	produto_repo
+		.listarPorID(req.params.id)
 		.then(data => {
 			res.status(200).send(data);
 		}).catch(e => {
@@ -29,12 +26,8 @@ exports.listarPorID = (req, res) => {
 }
 
 exports.listarProdCodigo = (req, res) => {
-	produto.findOne(
-		{
-			codigo: req.params.codigo,
-			ativo: true
-		},
-		'codigo titulo preco marca')
+	produto_repo
+		.listarProdCodigo(req.params.codigo)
 		.then(data => {
 			res.status(200).send(data);
 		}).catch(e => {
@@ -43,9 +36,8 @@ exports.listarProdCodigo = (req, res) => {
 }
 
 exports.listarProdutos = (req, res) => {
-	produto.find(
-		{ ativo: true }, // Traz somente os ativos
-		'titulo preco') // Exibe somente as colunas titulo e preco
+	produto_repo
+		.listarProdutos()
 		.then(data => {
 			res.status(200).send(data);
 		}).catch(e => {
@@ -53,7 +45,7 @@ exports.listarProdutos = (req, res) => {
 		});
 }
 
-exports.post = (req, res) => {
+exports.salvar = (req, res) => {
 	let valid = new validator();
 	valid.hasMinLen(req.body.titulo, 3, 'O título deve conter no mínimo 3 caracteres.');
 	valid.hasMinLen(req.body.descricao, 3, 'A descrição deve conter no mínimo 3 caracteres.');
@@ -63,13 +55,8 @@ exports.post = (req, res) => {
 		return;
 	}
 
-	var prod = new produto();
-	prod.titulo = req.body.titulo;
-	prod.codigo = req.body.codigo;
-	prod.descricao = req.body.descricao;
-	prod.preco = req.body.preco;
-	prod.marca = req.body.marca;
-	prod.save()
+	produto_repo
+		.salvar(req.body)
 		.then(x => {
 			res.status(201).send({ mensagem: 'Produto cadastrado com sucesso' });
 		}).catch(e => {
@@ -81,16 +68,8 @@ exports.post = (req, res) => {
 }
 
 exports.alterarProduto = (req, res) => {
-	produto
-		.findByIdAndUpdate(req.params.id,
-		{
-			$set:
-			{
-				titulo: req.body.titulo,
-				descricao: req.body.descricao,
-				preco: req.body.preco
-			}
-		})
+	produto_repo
+		.alterarProduto(req.params.id, req.body)
 		.then(x => {
 			res.status(200).send({ message: 'Produto atualizado!' });
 		})
@@ -105,8 +84,8 @@ exports.alterarProduto = (req, res) => {
 };
 
 exports.deletarProduto = (req, res) => {
-	produto
-		.findOneAndRemove(req.body.id)
+	produto_repo
+		.deletarProduto(req.body.id)
 		.then(x => {
 			res.status(200).send({ message: 'Produto removido com sucesso!' });
 		})
