@@ -1,10 +1,12 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const Produto = mongoose.model('Produto')
+const produto = mongoose.model('Produto')
+const validator = require('../validators/fluent-validator');
+
 
 exports.listarPorMarca = (req, res) => {
-	Produto.find(
+	produto.find(
 		{
 			marca: req.params.marca,
 			ativo: true
@@ -18,7 +20,7 @@ exports.listarPorMarca = (req, res) => {
 }
 
 exports.listarPorID = (req, res) => {
-	Produto.findById(req.params.id)
+	produto.findById(req.params.id)
 		.then(data => {
 			res.status(200).send(data);
 		}).catch(e => {
@@ -27,7 +29,7 @@ exports.listarPorID = (req, res) => {
 }
 
 exports.listarProdCodigo = (req, res) => {
-	Produto.findOne(
+	produto.findOne(
 		{
 			codigo: req.params.codigo,
 			ativo: true
@@ -41,7 +43,7 @@ exports.listarProdCodigo = (req, res) => {
 }
 
 exports.listarProdutos = (req, res) => {
-	Produto.find(
+	produto.find(
 		{ ativo: true }, // Traz somente os ativos
 		'titulo preco') // Exibe somente as colunas titulo e preco
 		.then(data => {
@@ -52,12 +54,21 @@ exports.listarProdutos = (req, res) => {
 }
 
 exports.post = (req, res) => {
-	var prod = new Produto();
+	let valid = new validator();
+	valid.hasMinLen(req.body.titulo, 3, 'O título deve conter no mínimo 3 caracteres.');
+	valid.hasMinLen(req.body.descricao, 3, 'A descrição deve conter no mínimo 3 caracteres.');
+
+	if (!valid.isValid()) {
+		res.status(400).send(valid.errors()).end();
+		return;
+	}
+
+	var prod = new produto();
 	prod.titulo = req.body.titulo;
 	prod.codigo = req.body.codigo;
 	prod.descricao = req.body.descricao;
 	prod.preco = req.body.preco;
-	prod.marca = [req.body.marca + " preta", req.body.marca + " amarela"];
+	prod.marca = req.body.marca;
 	prod.save()
 		.then(x => {
 			res.status(201).send({ mensagem: 'Produto cadastrado com sucesso' });
@@ -70,7 +81,7 @@ exports.post = (req, res) => {
 }
 
 exports.alterarProduto = (req, res) => {
-	Produto
+	produto
 		.findByIdAndUpdate(req.params.id,
 		{
 			$set:
@@ -94,17 +105,17 @@ exports.alterarProduto = (req, res) => {
 };
 
 exports.deletarProduto = (req, res) => {
-	Produto
-	.findOneAndRemove(req.body.id)
-	.then(x => {
-		res.status(200).send({ message: 'Produto removido com sucesso!' });
-	})
-	.catch(e => {
-		res.status(400)
-			.send(
-			{
-				message: 'Falha ao remover o produto',
-				data: e
-			});
-	});
+	produto
+		.findOneAndRemove(req.body.id)
+		.then(x => {
+			res.status(200).send({ message: 'Produto removido com sucesso!' });
+		})
+		.catch(e => {
+			res.status(400)
+				.send(
+				{
+					message: 'Falha ao remover o produto',
+					data: e
+				});
+		});
 };
