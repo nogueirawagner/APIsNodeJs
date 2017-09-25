@@ -3,39 +3,44 @@
 const mongoose = require('mongoose');
 const produto = mongoose.model('Produto')
 
-exports.listarPorMarca = (marca) => {
-    return produto.find(
+exports.listarPorMarca = async (marca) => {
+    const result = await produto.find(
         {
             marca: marca,
             ativo: true
         }, 'codigo titulo preco marca');
+    return result;
 }
 
-exports.listarProdutos = () => {
-    return produto.find({
+exports.listarProdutos = async () => {
+    const result = await produto.find({
         ativo: true
     }, 'titulo preco marca');
+    return result;
 }
 
-exports.listarPorID = (id) => {
-    return produto.findById(id);
+exports.listarPorID = async (id) => {
+    const result = await produto.findById(id);
+    return result
 }
 
-exports.listarProdCodigo = (codigo) => {
-    return produto.findOne(
+exports.listarProdCodigo = async (codigo) => {
+    const result = await produto.findOne(
         {
             codigo: codigo,
             ativo: true
         }, 'codigo titulo preco marca');
+        return result;
 }
 
-exports.salvar = (data) => {
+exports.salvar = async (data) => {
     var prod = new produto(data);
-    return prod.save();
+    const result = await prod.save();
+    return result;
 }
 
-exports.alterarProduto = (id, data) => {
-    return produto
+exports.alterarProduto = async (id, data) => {
+    const result = await produto
         .findByIdAndUpdate(id,
         {
             $set:
@@ -45,8 +50,10 @@ exports.alterarProduto = (id, data) => {
                 preco: data.preco
             }
         });
+        return result;
 }
 
-exports.deletarProduto = (id) => {
-    return produto.findOneAndRemove(id);
+exports.deletarProduto = async (id) => {
+    const result = await produto.findOneAndRemove(id);
+    return result;
 }
