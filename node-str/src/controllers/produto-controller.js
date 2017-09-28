@@ -65,7 +65,9 @@ exports.salvar = async (req, res) => {
 
 	try {
 		const data = produto_repo.salvar(req.body);
-		res.status(200).send(data);
+		res.status(200).send({
+			message: 'Produto cadastrado com sucesso.'
+		});
 	} catch (e) {
 		res.status(500).send({
 			message: 'Falha ao processar sua requisiçao',
