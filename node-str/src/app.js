@@ -3,6 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const config = require('./config')
 
 const app = express();
 const router = express.Router();
@@ -12,7 +13,7 @@ const Cliente = require('./models/cliente');
 const Ordem = require('./models/ordem');
 
 //Conecta ao banco
-mongoose.connect('mongodb://sa:sa@ds044989.mlab.com:44989/apisnode');
+mongoose.connect(config.connectionString);
 
 // Carrega rotas
 const indexRoute = require('./routes/index-route');
