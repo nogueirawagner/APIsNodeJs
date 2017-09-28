@@ -2,6 +2,7 @@
 
 const cliente_repo = require('../repositories/cliente-repositorio');
 const validator = require('../validators/fluent-validator');
+const md5 = require('md5');
 
 exports.listarClientes = async (req, res) => {
 	try {
@@ -30,7 +31,12 @@ exports.salvar = async (req, res) => {
 	}
 
 	try {
-		const data = cliente_repo.salvar(req.body);
+		const data = cliente_repo.salvar(
+			{
+				nome: req.body.nome,
+				email: req.body.email,
+				senha: md5(req.body.senha + global.SALT_KEY)
+			});
 		res.status(200).send({
 			message: 'Cliente cadastrado com sucesso.'
 		});

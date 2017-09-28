@@ -3,6 +3,6 @@ global.EMAIL_TMPL = '<strong>0</strong>'
 
 module.exports = {
     connectionString: 'mongodb://sa:sa@ds044989.mlab.com:44989/apisnode',
-    sendgridKey = 'TBD',
-    containerConnectionString = 'TBD'
+    sendgridKey: 'TBD',
+    containerConnectionString: 'TBD'
 }
