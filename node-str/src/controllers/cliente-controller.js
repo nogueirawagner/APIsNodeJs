@@ -3,6 +3,7 @@
 const cliente_repo = require('../repositories/cliente-repositorio');
 const validator = require('../validators/fluent-validator');
 const md5 = require('md5');
+const email_service = require('../services/email-services');
 
 exports.listarClientes = async (req, res) => {
 	try {
@@ -37,6 +38,18 @@ exports.salvar = async (req, res) => {
 				email: req.body.email,
 				senha: md5(req.body.senha + global.SALT_KEY)
 			});
+
+		try {
+			email_service.send(
+				req.body.email, 
+				'Bem vindo a node store', 
+				global.EMAIL_TMPL.replace('{0}', req.body.nome));
+
+		} catch (error) {
+			message: 'Falha ao enviar email';
+		}
+		
+
 		res.status(200).send({
 			message: 'Cliente cadastrado com sucesso.'
 		});
