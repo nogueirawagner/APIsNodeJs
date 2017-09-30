@@ -4,6 +4,7 @@ const cliente_repo = require('../repositories/cliente-repositorio');
 const validator = require('../validators/fluent-validator');
 const md5 = require('md5');
 const email_service = require('../services/email-services');
+const auth_services = require('../services/auth-services');
 
 exports.listarClientes = async (req, res) => {
 	try {
@@ -32,28 +33,51 @@ exports.salvar = async (req, res) => {
 	}
 
 	try {
-		const data = cliente_repo.salvar(
+		const data = await cliente_repo.salvar(
 			{
 				nome: req.body.nome,
 				email: req.body.email,
 				senha: md5(req.body.senha + global.SALT_KEY)
 			});
-
-		try {
-			email_service.send(
-				req.body.email, 
-				'Bem vindo a node store', 
-				global.EMAIL_TMPL.replace('{0}', req.body.nome));
-
-		} catch (error) {
-			message: 'Falha ao enviar email';
-		}
-		
-
 		res.status(200).send({
 			message: 'Cliente cadastrado com sucesso.'
 		});
 	} catch (e) {
+		res.status(500).send({
+			message: 'Falha ao processar sua requisiçao',
+			data: e
+		});
+	}
+}
+
+exports.sessao = async (req, res) => {
+	try {
+		const data = await cliente_repo.sessao(
+			{
+				email: req.body.email,
+				senha: md5(req.body.senha + global.SALT_KEY)
+			});
+		if (!data) {
+			res.status(404).send({
+				message: 'Email ou senhas inválidos'
+			});
+			return;
+		}
+
+		const token = await auth_services.generateToken({
+			email: data.email,
+			senha: data.senha
+		});
+
+		res.status(201).send({
+			token: token,
+			usuario: {
+				email: data.email,
+				senha: data.senha
+			}
+		});
+	} catch (e) {
+		console.log(e);
 		res.status(500).send({
 			message: 'Falha ao processar sua requisiçao',
 			data: e

@@ -13,3 +13,11 @@ exports.salvar = async (data) => {
     const result = await cli.save();
     return result;
 }
+
+exports.sessao = async (data) => {
+    const res = await cliente.findOne({
+        email: data.email,
+        senha: data.senha
+    });
+    return res;
+}
