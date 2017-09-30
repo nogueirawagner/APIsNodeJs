@@ -65,6 +65,7 @@ exports.sessao = async (req, res) => {
 		}
 
 		const token = await auth_services.generateToken({
+			id: data._id,
 			email: data.email,
 			senha: data.senha
 		});
@@ -74,6 +75,42 @@ exports.sessao = async (req, res) => {
 			usuario: {
 				email: data.email,
 				senha: data.senha
+			}
+		});
+	} catch (e) {
+		console.log(e);
+		res.status(500).send({
+			message: 'Falha ao processar sua requisiçao',
+			data: e
+		});
+	}
+}
+
+exports.atualizaSessao = async (req, res) => {
+	try {
+		const token = req.body.token || req.query.token || req.headers['x-access-token'];
+		const data_token = await auth_services.decodeToken(token);
+
+		const cliente = await cliente_repo.pegarPorID(data_token.id);
+		if(!cliente)
+		{
+			res.status(401).send({
+				message: 'Cliente não encontrado'
+			});
+			return;
+		}
+
+		const newToken = await auth_services.generateToken({
+			id: cliente._id,
+			email: cliente.email,
+			senha: cliente.senha
+		});
+
+		res.status(201).send({
+			token: newToken,
+			usuario: {
+				email: cliente.email,
+				senha: cliente.senha
 			}
 		});
 	} catch (e) {
