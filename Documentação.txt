@@ -1,0 +1,20 @@
+1º- Criar uma sessão válida utilizando o serviço:
+URL: localhost:3000/clientes/sessao
+Body: {
+	"email": "alex@oi.com",
+	"senha": "151091"
+}
+O retorno será:
+{
+    "token": "eyJhbG9...",
+    "usuario": {
+        "email": "alex@oi.com",
+        "senha": "237f2f9d288cb4a1ecd455a80feb6544"
+    }
+}
+Esse token deve ser copiado e mandado no header da requisição, como valor para o parametro: x-access-token.
+
+2º- Atualizar a sessão do usuário logado:
+URL: localhost:3000/clientes/atualiza
+Headers:
+x-access-token

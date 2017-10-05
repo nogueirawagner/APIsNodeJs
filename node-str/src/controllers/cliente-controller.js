@@ -37,7 +37,8 @@ exports.salvar = async (req, res) => {
 			{
 				nome: req.body.nome,
 				email: req.body.email,
-				senha: md5(req.body.senha + global.SALT_KEY)
+				senha: md5(req.body.senha + global.SALT_KEY),
+				roles: req.body.roles
 			});
 		res.status(200).send({
 			message: 'Cliente cadastrado com sucesso.'
@@ -67,7 +68,8 @@ exports.sessao = async (req, res) => {
 		const token = await auth_services.generateToken({
 			id: data._id,
 			email: data.email,
-			senha: data.senha
+			senha: data.senha,
+			roles: data.roles
 		});
 
 		res.status(201).send({
@@ -103,7 +105,8 @@ exports.atualizaSessao = async (req, res) => {
 		const newToken = await auth_services.generateToken({
 			id: cliente._id,
 			email: cliente.email,
-			senha: cliente.senha
+			senha: cliente.senha,
+			roles: cliente.roles
 		});
 
 		res.status(201).send({
